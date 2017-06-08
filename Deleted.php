@@ -66,6 +66,10 @@ class Deleted extends ActiveRecord
 
             ['type', 'in', 'range' => array_keys(self::types())],
             ['type', 'default', 'value' => self::TYPE_DEFAULT],
+
+            // for GridView filter
+            [['created_by'], 'integer'],
+            [['created_at'], 'string'],
         ];
     }
 

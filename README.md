@@ -8,7 +8,7 @@ Model, behavior and action to store/restore active records.
 
 and run migrations:
 
-``yii migrate --migrationPath=@ereminmdev/deleted/migrations --interactive=0``
+``yii migrate --migrationPath=@vendor/ereminmdev/yii2-deleted/migrations --interactive=0``
 
 ## Use
 
