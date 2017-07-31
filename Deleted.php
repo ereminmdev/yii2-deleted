@@ -136,7 +136,7 @@ class Deleted extends ActiveRecord
                 ];
             },
             'gridColumnsOnly' => ['created_at', 'created_by', 'type', 'class_name', 'comment'],
-            'сolumnsSchema' => [
+            'columnsSchema' => [
                 'type' => [
                     'type' => 'array',
                     'itemList' => function () {
