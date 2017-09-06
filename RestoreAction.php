@@ -16,24 +16,19 @@ class RestoreAction extends Action
 
     public function run($id)
     {
-        $id = Yii::$app->request->get('id', '');
         $ids = explode(',', $id);
 
-        $restoredCount = 0;
+        foreach (Deleted::find()->andWhere(['id' => $ids])->each() as $model) {
+            /** @var Deleted $model */
 
-        /** @var Deleted[] $models */
-        $models = Deleted::find()->andWhere(['id' => $ids])->all();
-        foreach ($models as $model) {
-            if ($model->restoreModel()) {
+            $restoredModel = $model->getDeletedModel();
+
+            if ($restoredModel->validate() && $restoredModel->save()) {
                 $model->delete();
-                $restoredCount++;
+                Yii::$app->session->addFlash('success', Yii::t('app', 'Model successfully restored: {comment}', ['comment' => $model->comment]));
+            } elseif ($restoredModel->hasErrors()) {
+                Yii::$app->session->addFlash('error', Yii::t('app', 'Model could not be restored: {error}', ['error' => var_export($restoredModel->getFirstErrors(), true)]));
             }
-        }
-
-        if ($restoredCount > 0) {
-            Yii::$app->session->addFlash('success', Yii::t('app', 'The requested model(s) was successfully restored.'));
-        } else {
-            Yii::$app->session->addFlash('error', Yii::t('app', 'The requested model(s) could not be restored.'));
         }
 
         $returnUrl = Yii::$app->request->get('returnUrl', $this->returnUrl);

@@ -24,6 +24,8 @@ use yii\helpers\StringHelper;
  * @property integer $created_by
  * @property integer $updated_at
  * @property integer $updated_by
+ *
+ * @property ActiveRecord $deletedModel
  */
 class Deleted extends ActiveRecord
 {
@@ -59,13 +61,13 @@ class Deleted extends ActiveRecord
     public function rules()
     {
         return [
-            [['type'], 'integer'],
-            [['class_name', 'model_data'], 'required'],
-            [['model_data'], 'string'],
             [['class_name', 'comment'], 'string', 'max' => 255],
+            [['model_data'], 'string'],
 
             ['type', 'in', 'range' => array_keys(self::types())],
             ['type', 'default', 'value' => self::TYPE_DEFAULT],
+
+            [['class_name', 'model_data'], 'required'],
 
             // for GridView filter
             [['created_by'], 'integer'],
@@ -100,7 +102,7 @@ class Deleted extends ActiveRecord
      * @param string $comment
      * @return self|false
      */
-    public static function addModel($model, $comment = '')
+    public static function addDeletedModel($model, $comment = '')
     {
         $deleted = new static();
         $deleted->class_name = $model::className();
@@ -110,14 +112,26 @@ class Deleted extends ActiveRecord
     }
 
     /**
+     * @return ActiveRecord
+     */
+    public function getDeletedModel()
+    {
+        $modelData = Json::decode($this->model_data);
+
+        /** @var ActiveRecord $model */
+        $model = new $this->class_name;
+        $model->loadDefaultValues();
+        $model->setAttributes($modelData, false);
+        return $model;
+    }
+
+    /**
      * @return ActiveRecord|false
      */
     public function restoreModel()
     {
-        /** @var ActiveRecord $model */
-        $model = new $this->class_name;
-        $model->setAttributes(Json::decode($this->model_data), false);
-        return $model->save() ? $model : false;
+        $deletedModel = $this->getDeletedModel();
+        return $deletedModel->save() ? $deletedModel : false;
     }
 
     /**

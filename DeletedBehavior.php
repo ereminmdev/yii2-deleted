@@ -3,12 +3,11 @@
 namespace ereminmdev\yii2\deleted;
 
 use yii\base\Behavior;
-use yii\base\ModelEvent;
 use yii\db\ActiveRecord;
 
 
 /**
- * DeletedBehavior store model to Deleted record before one will be deleted.
+ * DeletedBehavior store model to Deleted record after one will be deleted.
  *
  * @property ActiveRecord $owner
  */
@@ -27,13 +26,13 @@ class DeletedBehavior extends Behavior
     public function events()
     {
         return [
-            ActiveRecord::EVENT_BEFORE_DELETE => 'beforeDelete',
+            ActiveRecord::EVENT_AFTER_DELETE => 'afterDelete',
         ];
     }
 
-    public function beforeDelete(ModelEvent $event)
+    public function afterDelete()
     {
-        Deleted::addModel($this->owner, $this->getComment());
+        Deleted::addDeletedModel($this->owner, $this->getComment());
     }
 
     public function getComment()
