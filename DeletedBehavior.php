@@ -19,6 +19,8 @@ class DeletedBehavior extends Behavior
      */
     public $comment = '';
 
+    protected $isDeleted = false;
+
 
     /**
      * @inheritdoc
@@ -32,9 +34,14 @@ class DeletedBehavior extends Behavior
 
     public function afterDelete()
     {
-        Deleted::addDeletedModel($this->owner, $this->getComment());
+        if (!$this->isDeleted) {
+            $this->isDeleted = Deleted::addDeletedModel($this->owner, $this->getComment()) !== false;
+        }
     }
 
+    /**
+     * @return string
+     */
     public function getComment()
     {
         return is_callable($this->comment) ?
