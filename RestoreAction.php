@@ -23,10 +23,18 @@ class RestoreAction extends Action
 
             $restoredModel = $model->getDeletedModel();
 
-            if ($restoredModel->validate() && $restoredModel->save()) {
-                $model->delete();
-                Yii::$app->session->addFlash('success', Yii::t('app', 'Model successfully restored: {comment}', ['comment' => $model->comment]));
-            } elseif ($restoredModel->hasErrors()) {
+            if ($restoredModel->validate()) {
+                try {
+                    if ($restoredModel->save()) {
+                        $model->delete();
+                        Yii::$app->session->addFlash('success', Yii::t('app', 'Model successfully restored: {comment}', ['comment' => $model->comment]));
+                    }
+                } catch (\Exception $e) {
+                    Yii::$app->session->addFlash('error', Yii::t('app', 'Model could not be restored: {error}', ['error' => $e->getMessage()]));
+                }
+            }
+
+            if ($restoredModel->hasErrors()) {
                 Yii::$app->session->addFlash('error', Yii::t('app', 'Model could not be restored: {error}', ['error' => var_export($restoredModel->getFirstErrors(), true)]));
             }
         }
