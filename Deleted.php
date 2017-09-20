@@ -4,6 +4,7 @@ namespace ereminmdev\yii2\deleted;
 
 use common\models\User;
 use ereminmdev\yii2\crud\components\Crud;
+use Yii;
 use yii\behaviors\BlameableBehavior;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
@@ -175,6 +176,9 @@ class Deleted extends ActiveRecord
                     return [
                         'label' => 'Восстановить',
                         'url' => ArrayHelper::merge(self::getRestoreAction($crud), ['id' => $model->id]),
+                        'linkOptions' => [
+                            'data-confirm' => Yii::t('app', 'Are you sure you want to restore this item?'),
+                        ],
                     ];
                 },
             ],
@@ -184,6 +188,9 @@ class Deleted extends ActiveRecord
                     return [
                         'label' => 'Восстановить',
                         'url' => self::getRestoreAction($crud),
+                        'linkOptions' => [
+                            'data-confirm' => Yii::t('app', 'Are you sure you want to restore this item?'),
+                        ],
                     ];
                 },
             ],
