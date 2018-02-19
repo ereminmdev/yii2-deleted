@@ -18,7 +18,7 @@ and run migrations:
 public function behaviors()
     {
         return [
-            DeletedBehavior::className(),
+            DeletedBehavior::class,
         ];
     }
 ```
@@ -30,7 +30,7 @@ public function behaviors()
     {
         return [
             [
-                'class' => DeletedBehavior::className(),
+                'class' => DeletedBehavior::class,
                 'comment' => function (self $model, DeletedBehavior $behavior) {
                     return 'Модель «' . $model->title . '»';
                 },

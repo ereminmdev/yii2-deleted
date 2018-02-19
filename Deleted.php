@@ -51,8 +51,8 @@ class Deleted extends ActiveRecord
     public function behaviors()
     {
         return [
-            TimestampBehavior::className(),
-            BlameableBehavior::className(),
+            TimestampBehavior::class,
+            BlameableBehavior::class,
         ];
     }
 
@@ -106,7 +106,7 @@ class Deleted extends ActiveRecord
     public static function addDeletedModel($model, $comment = '')
     {
         $deleted = new static();
-        $deleted->class_name = $model::className();
+        $deleted->class_name = $model::class;
         $deleted->model_data = Json::encode($model->getAttributes());
         $deleted->comment = StringHelper::truncate($comment, 255);
         return $deleted->save() ? $deleted : false;
