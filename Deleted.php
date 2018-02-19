@@ -106,7 +106,7 @@ class Deleted extends ActiveRecord
     public static function addDeletedModel($model, $comment = '')
     {
         $deleted = new static();
-        $deleted->class_name = $model::class;
+        $deleted->class_name = get_class($model);
         $deleted->model_data = Json::encode($model->getAttributes());
         $deleted->comment = StringHelper::truncate($comment, 255);
         return $deleted->save() ? $deleted : false;
