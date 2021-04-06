@@ -8,7 +8,7 @@ use yii\db\Migration;
 class m170606_134054_create_deleted_table extends Migration
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function safeUp()
     {
@@ -28,7 +28,7 @@ class m170606_134054_create_deleted_table extends Migration
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function safeDown()
     {

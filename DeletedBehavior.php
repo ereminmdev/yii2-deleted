@@ -23,7 +23,7 @@ class DeletedBehavior extends Behavior
 
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function events()
     {
