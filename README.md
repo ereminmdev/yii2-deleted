@@ -4,7 +4,7 @@ Model, behavior and action to store/restore active records.
 
 ## Install
 
-``composer require ereminmdev/yii2-deleted``
+``composer require --prefer-dist ereminmdev/yii2-deleted``
 
 and run migrations:
 
