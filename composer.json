@@ -2,7 +2,7 @@
   "name": "ereminmdev/yii2-deleted",
   "description": "Store/restore deleted models.",
   "keywords": ["yii2","restore"],
-  "homepage": "https://bitbucket.org/ereminmdev/yii2-deleted",
+  "homepage": "https://github.com/ereminmdev/yii2-deleted",
   "type": "yii2-extension",
   "license": "MIT",
   "authors": [
