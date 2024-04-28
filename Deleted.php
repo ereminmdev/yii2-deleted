@@ -30,7 +30,7 @@ use yii\helpers\StringHelper;
  */
 class Deleted extends ActiveRecord
 {
-    const TYPE_DEFAULT = 0;
+    public const TYPE_DEFAULT = 0;
     /**
      * @var string|array route to restore action
      */
@@ -154,45 +154,37 @@ class Deleted extends ActiveRecord
             'columnsSchema' => [
                 'type' => [
                     'type' => 'array',
-                    'itemList' => function () {
-                        return static::types();
-                    },
+                    'itemList' => fn() => static::types(),
                 ],
                 'created_by' => [
                     'type' => 'array',
-                    'itemList' => function () {
-                        return User::find()
-                            ->select(['username', 'id'])
-                            ->orderBy(['username' => SORT_ASC])
-                            ->indexBy('id')
-                            ->asArray()
-                            ->column();
-                    },
+                    'itemList' => fn() => User::find()
+                        ->select(['username', 'id'])
+                        ->orderBy(['username' => SORT_ASC])
+                        ->indexBy('id')
+                        ->asArray()
+                        ->column(),
                 ],
             ],
             'gridActionsTemplate' => "{restore}\n{--}\n{update}",
             'gridActions' => [
-                '{restore}' => function (self $model, $key, $crud) {
-                    return [
-                        'label' => 'Восстановить',
-                        'url' => ArrayHelper::merge(self::getRestoreAction($crud), ['id' => $model->id]),
-                        'linkOptions' => [
-                            'data-confirm' => Yii::t('app', 'Are you sure you want to restore this item?'),
-                        ],
-                    ];
-                },
+                '{restore}' => fn(self $model, $key, $crud) => [
+                    'label' => 'Восстановить',
+                    'url' => ArrayHelper::merge(self::getRestoreAction($crud), ['id' => $model->id]),
+                    'linkOptions' => [
+                        'data-confirm' => Yii::t('app', 'Are you sure you want to restore this item?'),
+                    ],
+                ],
             ],
             'gridCheckedActionsTemplate' => "{restore}\n{--}\n{setvals}\n{--}\n{duplicate}\n{--}\n{export}\n{--}\n{delete}",
             'gridCheckedActions' => [
-                '{restore}' => function ($crud) {
-                    return [
-                        'label' => 'Восстановить',
-                        'url' => self::getRestoreAction($crud),
-                        'linkOptions' => [
-                            'data-confirm' => Yii::t('app', 'Are you sure you want to restore this item?'),
-                        ],
-                    ];
-                },
+                '{restore}' => fn($crud) => [
+                    'label' => 'Восстановить',
+                    'url' => self::getRestoreAction($crud),
+                    'linkOptions' => [
+                        'data-confirm' => Yii::t('app', 'Are you sure you want to restore this item?'),
+                    ],
+                ],
             ],
         ];
     }
